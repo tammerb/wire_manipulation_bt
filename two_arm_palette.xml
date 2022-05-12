@@ -1,0 +1,25 @@
+<root>
+    <TreeNodesModel>
+        <SubTree ID="find_object_tree">
+            <inout_port name="__shared_blackboard" default="false">If false (default), the Subtree has an isolated blackboard and needs port remapping</inout_port>
+        </SubTree>
+        <Condition ID="isArmAvailable">
+            <input_port name="arm_ID" default="arm_1"/>
+        </Condition>
+        <Condition ID="isGraspCollisionFree">
+            <input_port name="arm_ID" default="0"/>
+            <input_port name="object_ID" default="0"/>
+        </Condition>
+        <Condition ID="isObjectAtTarget">
+            <input_port name="object_ID" default="0"/>
+        </Condition>
+        <Condition ID="isObjectPoseKnown">
+            <input_port name="object_ID" default="0"/>
+        </Condition>
+        <SubTree ID="move_object_tree">
+            <input_port name="__shared_blackboard" default="false">If false (default), the Subtree has an isolated blackboard and needs port remapping</input_port>
+        </SubTree>
+        <Action ID="scanEnvironment"/>
+    </TreeNodesModel>
+</root>
+

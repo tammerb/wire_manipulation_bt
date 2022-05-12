@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="main_tree">
+    <!-- ////////// -->
+    <BehaviorTree ID="clear_path_tree">
+        <Sequence>
+            <Action ID="pick" arm_ID="arm_1" object_ID="0"/>
+            <Action ID="place" arm_ID="arm_1" object_ID="0" tgt_pose="0"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="find_object_tree">
+        <Sequence>
+            <RetryUntilSuccessful num_attempts="10">
+                <Condition ID="isArmAvailable" arm_ID="arm_1"/>
+            </RetryUntilSuccessful>
+            <Action ID="scanEnvironment"/>
+            <Condition ID="isObjectPoseKnown" object_ID="0"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="main_tree">
+        <Fallback name="move_object_to_target_fallback">
+            <Condition ID="isObjectAtTarget" object_ID="0"/>
+            <Sequence name="manipulation_seq">
+                <Fallback>
+                    <Condition ID="isObjectPoseKnown" object_ID="0"/>
+                    <SubTree ID="find_object_tree" __shared_blackboard="false"/>
+                </Fallback>
+                <SubTree ID="move_object_tree" __shared_blackboard="false"/>
+            </Sequence>
+        </Fallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="move_object_tree">
+        <Sequence>
+            <RetryUntilSuccessful num_attempts="10">
+                <Condition ID="isArmAvailable" arm_ID="arm_1"/>
+            </RetryUntilSuccessful>
+            <Fallback>
+                <Condition ID="isGraspCollisionFree" arm_ID="arm_1" object_ID="0"/>
+                <SubTree ID="clear_path_tree" __shared_blackboard="false"/>
+            </Fallback>
+            <Action ID="pick" arm_ID="arm_1" object_ID="0"/>
+            <Action ID="place" arm_ID="arm_1" object_ID="0" tgt_pose="0"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <SubTree ID="clear_path_tree">
+            <input_port default="false" name="__shared_blackboard">If false (default), the Subtree has an isolated blackboard and needs port remapping</input_port>
+        </SubTree>
+        <SubTree ID="find_object_tree">
+            <inout_port default="false" name="__shared_blackboard">If false (default), the Subtree has an isolated blackboard and needs port remapping</inout_port>
+        </SubTree>
+        <Condition ID="isArmAvailable">
+            <input_port default="arm_1" name="arm_ID"/>
+        </Condition>
+        <Condition ID="isGraspCollisionFree">
+            <input_port default="0" name="arm_ID"/>
+            <input_port default="0" name="object_ID"/>
+        </Condition>
+        <Condition ID="isObjectAtTarget">
+            <input_port default="0" name="object_ID"/>
+        </Condition>
+        <Condition ID="isObjectPoseKnown">
+            <input_port default="0" name="object_ID"/>
+        </Condition>
+        <Action ID="moveWire">
+            <input_port default="arm_1" name="arm_ID"/>
+            <input_port default="0" name="wire_pose"/>
+        </Action>
+        <SubTree ID="move_object_tree">
+            <input_port default="false" name="__shared_blackboard">If false (default), the Subtree has an isolated blackboard and needs port remapping</input_port>
+        </SubTree>
+        <Action ID="pick">
+            <input_port default="arm_1" name="arm_ID"/>
+            <input_port default="0" name="object_ID"/>
+        </Action>
+        <Action ID="place">
+            <input_port default="arm_1" name="arm_ID"/>
+            <input_port default="0" name="object_ID"/>
+            <input_port default="0" name="tgt_pose"/>
+        </Action>
+        <Action ID="scanEnvironment"/>
+        <Action ID="senseWire">
+            <input_port default="arm_1" name="arm_ID"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
+
