@@ -1,3 +1,5 @@
-#### Behavior tree and palette for [Wire Manipulation](https://github.com/Drojas251/wire_manipulation)
+#### Behavior Tree for Wire Manipulation
 
-#### For use with [BehaviorTree.cpp](https://github.com/BehaviorTree/BehaviorTree.CPP) using [Groot](https://github.com/BehaviorTree/Groot)
+Behavior tree and palette for [Wire Manipulation](https://github.com/Drojas251/wire_manipulation)
+
+For use with [BehaviorTree.cpp](https://github.com/BehaviorTree/BehaviorTree.CPP), and built using [Groot](https://github.com/BehaviorTree/Groot).
